@@ -4,9 +4,9 @@ A multiplayer dare game built with Flutter — challenge your friends, complete 
 
 ## 📸 Screenshots
 
-| Splash | Home | Create Game |
-|--------|------|-------------|
-| ![Splash](screenshots/splash.png) | ![Home](screenshots/home.png) | ![Create Game](screenshots/create_game.png) |
+| Splash | Login | Home | Game |
+|--------|------|-------------|------|
+| ![Splash](screenshots/splash.png) | ![Home](screenshots/login.png) | ![Create Game](screenshots/home.png) | ![Game](screenshots/create_game.png) |
 
 
 > **Note:** Replace placeholder paths with actual screenshots.
