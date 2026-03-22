@@ -1,6 +1,7 @@
 import 'package:dare_circle/src/features/game/view/create_game_view.dart';
 import 'package:dare_circle/src/features/home/widget/game_action_button.dart';
 import 'package:dare_circle/src/features/home/widget/room_id_field.dart';
+import 'package:dare_circle/src/features/home/widget/user_card.dart';
 import 'package:dare_circle/src/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,7 @@ class _HomeContentState extends State<HomeContent> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              const UserCard(),
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
                   colors: [AppColors.primary, AppColors.secondary],

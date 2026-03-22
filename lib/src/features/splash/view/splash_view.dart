@@ -1,18 +1,23 @@
+import 'package:dare_circle/src/common/controller/init.dart';
+import 'package:dare_circle/src/common/provider/common_providers.dart';
+import 'package:dare_circle/src/features/auth/view/login_view.dart';
 import 'package:dare_circle/src/features/home/view/home.dart';
 import 'package:dare_circle/src/resources/app_colors.dart';
 import 'package:dare_circle/src/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class SplashView extends StatefulWidget {
+class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
 
   static const routePath = "/splash";
 
   @override
-  State<SplashView> createState() => _SplashViewState();
+  ConsumerState<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView>
+class _SplashViewState extends ConsumerState<SplashView>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _lottieOpacity;
@@ -24,6 +29,8 @@ class _SplashViewState extends State<SplashView>
   @override
   void initState() {
     super.initState();
+
+    ref.read(initProvider.future);
 
     _controller = AnimationController(
       vsync: this,
@@ -68,24 +75,29 @@ class _SplashViewState extends State<SplashView>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(const Duration(milliseconds: 800), _navigateToHome);
+        Future.delayed(
+          const Duration(milliseconds: 800),
+          _checkAuthAndNavigate,
+        );
       }
     });
   }
 
-  void _navigateToHome() {
+  Future<void> _checkAuthAndNavigate() async {
+    // Wait for the initialization to complete
+    await ref.read(initProvider.future);
+
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 600),
-        reverseTransitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const HomeView(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    );
+
+    // Check if the user is authenticated
+    final token = ref.read(authTokenProvider);
+    final isAuthenticated = token != null;
+
+    if (isAuthenticated) {
+      context.go(HomeView.routePath);
+    } else {
+      context.go(LoginView.routePath);
+    }
   }
 
   @override
